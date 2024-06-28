@@ -1,0 +1,87 @@
+Enter password: ************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 17
+Server version: 8.0.35 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use librarymanagement;
+Database changed
+mysql> create table Department(Dept_id int(5) primary key auto_increment,Name varchar(20) Not Null);
+Query OK, 0 rows affected, 1 warning (0.44 sec)
+
+mysql> desc Department;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| Dept_id | int         | NO   | PRI | NULL    | auto_increment |
+| Name    | varchar(20) | NO   |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+2 rows in set (0.01 sec)
+
+mysql> create table Students(Sid int(5) primary key auto_increment,Name varchar(20) Not Null,Email varchar(20) Not NullUnique, Contact varchar(20) Not Null Unique,Dept_id int(5),foreign key(Dept_id) references Department(Dept_id) on delete cascade on update cascade);
+Query OK, 0 rows affected, 2 warnings (0.53 sec)
+
+mysql> desc Students;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| Sid     | int         | NO   | PRI | NULL    | auto_increment |
+| Name    | varchar(20) | NO   |     | NULL    |                |
+| Email   | varchar(20) | NO   | UNI | NULL    |                |
+| Contact | varchar(20) | NO   | UNI | NULL    |                |
+| Dept_id | int         | YES  | MUL | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> create table Book(Bid int(5) primary key auto_increment,Name varchar(20) Not Null,Category varchar(20) Not Null,A
+uthor varchar(20) Not Null,Publication varchar(20) Not Null);
+Query OK, 0 rows affected, 1 warning (0.20 sec)
+
+mysql> desc Book;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| Bid         | int         | NO   | PRI | NULL    | auto_increment |
+| Name        | varchar(20) | NO   |     | NULL    |                |
+| Category    | varchar(20) | NO   |     | NULL    |                |
+| Author      | varchar(20) | NO   |     | NULL    |                |
+| Publication | varchar(20) | NO   |     | NULL    |                |
++-------------+-------------+------+-----+---------+----------------+
+5 rows in set (0.00 sec)
+
+mysql> create table Bookissue(Bid int(5),Sid int(5),foreign key(Bid) references Book(Bid) on delete cascade on update ca
+scade, foreign key(Sid) references Students(Sid) on delete cascade on update cascade, status varchar(20) Not Null,Issued
+ate Date Not Null, Returndate Date Not Null);
+Query OK, 0 rows affected, 2 warnings (0.24 sec)
+
+mysql> desc Bookissue;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| Bid        | int         | YES  | MUL | NULL    |       |
+| Sid        | int         | YES  | MUL | NULL    |       |
+| status     | varchar(20) | NO   |     | NULL    |       |
+| Issuedate  | date        | NO   |     | NULL    |       |
+| Returndate | date        | NO   |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> show tables;
++-----------------------------+
+| Tables_in_librarymanagement |
++-----------------------------+
+| book                        |
+| bookissue                   |
+| department                  |
+| students                    |
++-----------------------------+
+4 rows in set (0.03 sec)
+
+mysql>
