@@ -40,8 +40,7 @@ mysql> desc Students;
 +---------+-------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 
-mysql> create table Book(Bid int(5) primary key auto_increment,Name varchar(20) Not Null,Category varchar(20) Not Null,A
-uthor varchar(20) Not Null,Publication varchar(20) Not Null);
+mysql> create table Book(Bid int(5) primary key auto_increment,Name varchar(20) Not Null,Category varchar(20) Not Null, Author varchar(20) Not Null, Publication varchar(20) Not Null);
 Query OK, 0 rows affected, 1 warning (0.20 sec)
 
 mysql> desc Book;
@@ -56,9 +55,7 @@ mysql> desc Book;
 +-------------+-------------+------+-----+---------+----------------+
 5 rows in set (0.00 sec)
 
-mysql> create table Bookissue(Bid int(5),Sid int(5),foreign key(Bid) references Book(Bid) on delete cascade on update ca
-scade, foreign key(Sid) references Students(Sid) on delete cascade on update cascade, status varchar(20) Not Null,Issued
-ate Date Not Null, Returndate Date Not Null);
+mysql> 
 Query OK, 0 rows affected, 2 warnings (0.24 sec)
 
 mysql> desc Bookissue;

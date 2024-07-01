@@ -25,4 +25,28 @@ public class BookService
     {
         return brepo.isUpdatebook(bm);
     }
+    public boolean isBookdeleted(Bookmodel bm)
+    {
+        return brepo.isBookdeleted(bm);
+    }
+    public int getbookcountbycat(String category)
+    {
+        int count = brepo.getbookcountbycat(category);
+        return count;
+    }
+    public Vector<Bookmodel> getcategorywisebooks(String Category)
+    {
+        Vector<Bookmodel> v = brepo.getcategorywisebooks(Category);
+        return v;
+    }
+    public int searchbook(int Bid)
+    {
+        int id = brepo.searchbook(Bid);
+        return id;
+    }
+    public Vector<Bookmodel> getdetails(int Bid)
+    {
+        Vector<Bookmodel> v = brepo.getdetails(Bid);
+        return v;
+    }
 }

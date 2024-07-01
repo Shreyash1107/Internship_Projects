@@ -3,6 +3,8 @@ package org.repository;
 import org.config.DBHelper;
 import org.config.PathHelper;
 import org.model.Bookmodel;
+import org.model.Studentmodel;
+
 import static java.lang.System.*;
 
 import java.io.BufferedReader;
@@ -107,5 +109,117 @@ public class Bookrepository extends DBHelper
             out.println("Error is " + ex);
         }
         return false;
+    }
+    public boolean isBookdeleted(Bookmodel bm)
+    {
+        int val = 0;
+        try
+        {
+            pstmt = conn.prepareStatement("delete from Book where Bid = ?");
+            pstmt.setInt(1, bm.getbid());
+            val = pstmt.executeUpdate();
+            return val>0?true:false;
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return false;
+    }
+    public int getbookcountbycat(String category)
+    {
+        int val = 0;
+        try
+        {
+            pstmt = conn.prepareStatement("select count(Name) from Book where Category = ?");
+            pstmt.setString(1, category);
+            rs = pstmt.executeQuery();
+            while(rs.next())
+            {
+                Bookmodel bm = new Bookmodel();
+                bm.setname(rs.getString(1));
+                val = rs.getInt(1);
+            }
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return val;
+    }
+    public Vector<Bookmodel> getcategorywisebooks(String Category)
+    {
+        v = new Vector<Bookmodel>();
+        try
+        {
+            pstmt = conn.prepareStatement("select *from Book where Category = ?");
+            pstmt.setString(1, Category);
+            rs = pstmt.executeQuery();
+            while(rs.next())
+            {
+                Bookmodel bm = new Bookmodel();
+                bm.setbid(rs.getInt(1));
+                bm.setname(rs.getString(2));
+                bm.setCategory(rs.getString(3));
+                bm.setAuthor(rs.getString(4));
+                bm.setpublication(rs.getString(5));
+                bm.setLanguage(rs.getString(6));
+                v.add(bm);
+            }
+            return v.size()>0?v:null;
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return null;
+    }
+    public int searchbook(int Bid)
+    {
+        int val = 0;
+        try
+        {
+            pstmt = conn.prepareStatement("select *from Book where Bid = ?");
+            pstmt.setInt(1, Bid);
+            rs = pstmt.executeQuery();
+            while(rs.next())
+            {
+                Bookmodel bm = new Bookmodel();
+                val = rs.getInt(1);
+            }
+            return val;
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return Bid;
+    }   
+    public Vector<Bookmodel> getdetails(int Bid)
+    {
+        v = new Vector<Bookmodel>();
+        try
+        {
+            pstmt = conn.prepareStatement("select *from Book where Bid = ?");
+            pstmt.setInt(1, Bid);
+            rs = pstmt.executeQuery();
+            while(rs.next())
+            {
+                Bookmodel bm = new Bookmodel();
+                bm.setbid(rs.getInt(1));
+                bm.setname(rs.getString(2));
+                bm.setCategory(rs.getString(3));
+                bm.setAuthor(rs.getString(4));
+                bm.setpublication(rs.getString(5));
+                bm.setLanguage(rs.getString(6));
+                v.add(bm);
+            }
+            return v.size()>0?v:null;
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return  null;
     }
 }
