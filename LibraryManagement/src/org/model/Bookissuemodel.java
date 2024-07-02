@@ -2,6 +2,7 @@ package org.model;
 
 public class Bookissuemodel 
 {
+    private int issueid;
     private int Bid;
     private int Sid;
     private Bookmodel bm;
@@ -9,6 +10,15 @@ public class Bookissuemodel
     private String issuedate;
     private String returndate;
     private String duedate;
+    private String status;
+    public void setissueid(int issueid)
+    {
+        this.issueid = issueid;
+    }
+    public int getissueid()
+    {
+        return issueid;
+    }
     public void setBid(int Bid)
     {
         this.Bid = Bid;
@@ -64,5 +74,13 @@ public class Bookissuemodel
     public String getduedate()
     {
         return duedate;
+    }
+    public void setstatus(String status)
+    {
+        this.status = status;
+    }
+    public String getstatus()
+    {
+        return status;
     }
 }

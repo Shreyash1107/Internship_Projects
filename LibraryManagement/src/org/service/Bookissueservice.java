@@ -14,6 +14,11 @@ public class Bookissueservice
         int issueid = birepo.searchbooktoissue(Bid);
         return issueid;
     }
+    public int searchstudentforissuebook(int Sid)
+    {
+        int issueid = birepo.searchstudentforissuebook(Sid);
+        return issueid;
+    }
     public boolean issueBook(Bookissuemodel bim)
     {
         return birepo.issueBook(bim);
@@ -23,9 +28,18 @@ public class Bookissueservice
         LinkedHashMap<String,Integer> map = birepo.getmostreadbooks();
         return map;
     }
+    public Vector<Bookissuemodel> getissuedbookd()
+    {
+        Vector<Bookissuemodel> vect = birepo.getissuedbooks();
+        return vect;
+    } 
     public Vector<Bookissuemodel> getremainingbooks()
     {
         Vector<Bookissuemodel> vect = birepo.getremainingbooks();
         return vect;
+    }
+    public boolean isbookstatusupdated(Bookissuemodel bim)
+    {
+        return birepo.isbookstatusupdated(bim);
     }
 }

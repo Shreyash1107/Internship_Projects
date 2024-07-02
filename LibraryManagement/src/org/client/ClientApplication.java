@@ -19,8 +19,8 @@ public class ClientApplication
 
 public static void main(String args[])
    {
-        int choice,bid,deptid,Sid;
-        int temp;
+        int choice,bid,deptid,Sid,issueid;
+        int temp,temp1;
         String name,category,author,pub,language,msg,contact,email,ques,issueddate,returndate,duedate;
         String sendername,emailsub,emailcont;
         boolean flag;
@@ -43,8 +43,6 @@ public static void main(String args[])
         Scanner xyz = new Scanner(System.in);
         do
         {
-            out.println(" ");
-            out.println(" "+ " " + " " + " "+ " " + " " + " "+ " " + " " + "**************************WELCOME TO THE LIBRARY******************" + " " + " " + " " + " "+ " " + " ");
             out.println(" ");
             out.println("1.Add/View/Delete/Update Books in Library.");
             out.println("2.Add the Department Details.");
@@ -650,14 +648,16 @@ public static void main(String args[])
                         out.println("Enter the Book Id to check whether it is availble to issue or not:");
                         bid = xyz.nextInt();
                         out.println(" ");
+                        out.println("What is your Student Id?"); //asking Student his Id
+                        Sid = xyz.nextInt();
+                        out.println(" ");
                         temp = bis.searchbooktoissue(bid);
-                        if(temp!=0)
+                        temp1 = bis.searchstudentforissuebook(Sid);
+                        if(temp!=0 && temp1!=0)
                         {
-                            out.println("Book with id " + bid + " is available in Library to issue");
+                            out.println("Book with id " + bid + " and Student with Id " + Sid + " are availble so that book can be issued to Students.....");
                             out.println(" ");
                             bim.setBid(bid);
-                            out.println("What is your Student Id?"); //asking Student his Id
-                            Sid = xyz.nextInt();
                             bim.setSid(Sid);
                             xyz.nextLine();  //Consuming newline character
                             out.println("Tell the Book Issue date to Student:");
@@ -667,6 +667,28 @@ public static void main(String args[])
                             duedate = xyz.nextLine();
                             bim.setduedate(duedate);
                             flag = bis.issueBook(bim);
+                            v4 = bis.getissuedbookd();
+                            if(v4!=null)
+                            {
+                                out.println("Issued Books Details are as Follows.....");
+                                out.println(" ");
+                                for(Bookissuemodel bimd : v4)
+                                {
+                                    out.println("Book Issue Id: " + bimd.getissueid());
+                                    out.println("Book Id: " + bimd.getBookmodel().getbid());
+                                    out.println("Student Id: " + bimd.getStudentmodel().getSid());
+                                    out.println("Issue Date: " + bimd.getissuedate());
+                                    out.println("Return Date: " + bimd.getreturndate());
+                                    out.println("Due Date: " + bimd.getduedate());
+                                    out.println("Status: " + bimd.getstatus());
+                                    out.println(" ");
+                                }
+                            }
+                            else
+                            {
+                                out.println("No Issued Books Details are there.....");
+                                out.println(" ");
+                            }
                             if(flag)
                             {
                                 out.println("Book Issued to the Student.....");
@@ -750,11 +772,49 @@ public static void main(String args[])
                         }
                         break;
                         case 12:
-                        out.println("12.Update the Book Status with Return Date.");
+                        out.println("12.Update the Book Status:");
                         out.println(" ");
+                        out.println("Enter the Book Issue Id provided to Student:");
+                        issueid = xyz.nextInt();
+                        bim.setissueid(issueid);
+                            xyz.nextLine();  //Cnsuming newline character
+                            out.println("When did the Student Returnded the Book?");
+                            returndate = xyz.nextLine();
+                            bim.setreturndate(returndate);
+                            out.println("Has Student return the Book on time?");
+                            msg = xyz.nextLine();
+                            if(msg.equals("yes"))
+                            {
+                                bim.setstatus("Returned");
+                            }
+                            else if(msg.equals("No"))
+                            {
+                                out.println("How much Late he had Submitted the Book ?");
+                                msg = xyz.nextLine();
+                                if(msg.equals("After duedate"))
+                                {
+                                    bim.setstatus("Overdue");
+                                        //Overdue meanins here Book returned by Student after due date
+                                }
+                            }
+                            else
+                            {
+                                bim.setstatus("Pending");
+                            }
+                            flag = bis.isbookstatusupdated(bim);
+                            if(flag)
+                            {
+                                out.println("Book Status Updated Successfully.....");
+                                out.println(" ");
+                            }
+                            else
+                            {
+                                out.println("Book Status Update Failed due to some problem....");
+                                out.println(" ");
+                            }
                         break;
                         case 13:
-                        out.println("13.Send Updates Regarding Book to the Stident through Mail.");
+                        out.println("13.Send Updates Regarding Book to the Student through Mail.");
                         out.println(" ");
                         xyz.nextLine();  //Consuming newline character
                         v1 = studservice.getstudent();
@@ -784,6 +844,6 @@ public static void main(String args[])
                         out.println("*****************THANK YOU FOR VISITING*******************");
                         break;
             }
-        }while(choice!=14);
+        }while(true);
    }
 }

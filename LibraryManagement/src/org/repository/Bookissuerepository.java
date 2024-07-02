@@ -7,6 +7,7 @@ import java.util.Vector;
 import org.config.DBHelper;
 import org.model.Bookissuemodel;
 import org.model.Bookmodel;
+import org.model.Studentmodel;
 
 public class Bookissuerepository extends DBHelper 
 {
@@ -30,12 +31,31 @@ public class Bookissuerepository extends DBHelper
         }
         return id;
     }
+    public int searchstudentforissuebook(int Sid)
+    {
+        int id = 0;
+        try
+        {
+            pstmt = conn.prepareStatement("select *from Students where Sid =?");
+            pstmt.setInt(1, Sid);
+            rs = pstmt.executeQuery();
+            while(rs.next())
+            {
+                id = rs.getInt(1);
+            }
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return id;
+    }
     public boolean issueBook(Bookissuemodel bim)
     {
         int val = 0;
         try
         {
-            pstmt = conn.prepareStatement("insert into Bookissue(Bid,Sid,issuedate,duedate)values(?,?,?,?)");
+            pstmt = conn.prepareStatement("insert into Bookissue(issueid,Bid,Sid,issuedate,duedate)values('0',?,?,?,?)");
             Bookmodel bm = new Bookmodel();
             pstmt.setInt(1, bim.getBid());
             pstmt.setInt(2, bim.getSid());
@@ -49,6 +69,37 @@ public class Bookissuerepository extends DBHelper
             out.println("Error is " + ex);
         }
         return false;
+    }
+    public Vector<Bookissuemodel> getissuedbooks()
+    {
+        vect = new Vector<Bookissuemodel>();
+        try
+        {
+            pstmt = conn.prepareStatement("select *from Bookissue");
+            rs = pstmt.executeQuery();
+            while(rs.next())
+            {
+                Bookissuemodel bim = new Bookissuemodel();
+                Bookmodel bmd = new Bookmodel();
+                Studentmodel sm = new Studentmodel();
+                bim.setissueid(rs.getInt(1));
+                bmd.setbid(rs.getInt(2));
+                bim.setBookmodel(bmd);
+                sm.setSid(rs.getInt(3));
+                bim.setStudentmodel(sm);
+                bim.setissuedate(rs.getString(4));
+                bim.setreturndate(rs.getString(5));
+                bim.setduedate(rs.getString(6));
+                bim.setstatus(rs.getString(7));
+                vect.add(bim);
+            }
+            return vect.size()>0?vect:null;
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return vect;
     }
     public LinkedHashMap<String,Integer> getmostreadbooks()
     {
@@ -99,5 +150,23 @@ public class Bookissuerepository extends DBHelper
             out.println("Error is " + ex);
         }
         return null;
+    }
+    public boolean isbookstatusupdated(Bookissuemodel bim)
+    {
+        int val = 0;
+        try
+        {
+            pstmt = conn.prepareStatement("update Bookissue set Returndate = ?, status = ? where issueid = ?");
+            pstmt.setString(1, bim.getreturndate());
+            pstmt.setString(2, bim.getstatus());
+            pstmt.setInt(3, bim.getissueid());
+            val = pstmt.executeUpdate();
+            return val>0?true:false;
+        }
+        catch(Exception ex)
+        {
+            out.println("Error is " + ex);
+        }
+        return false;
     }
 }
